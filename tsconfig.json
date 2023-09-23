@@ -11,7 +11,7 @@
 		"strict": true,
 		"target": "ES2022",
 		"module": "ES2022",
-		"lib": ["es6"],
+		"lib": ["es6", "dom"],
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
 		"strictPropertyInitialization": false

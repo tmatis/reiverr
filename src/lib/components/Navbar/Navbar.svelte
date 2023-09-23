@@ -5,8 +5,9 @@
 	import TitleSearchModal from './TitleSearchModal.svelte';
 	import IconButton from '../IconButton.svelte';
 	import { fade } from 'svelte/transition';
-	import { modalStack } from '../../stores/modal.store';
 	import { _ } from 'svelte-i18n';
+	import { modalStack } from '$lib/stores/modal.store';
+	import { authStore } from '$lib/stores/auth.store';
 
 	let y = 0;
 	let transparent = true;
@@ -53,8 +54,7 @@
 		href="/"
 		class="hidden sm:flex gap-2 items-center hover:text-inherit selectable rounded-sm px-2 -mx-2"
 	>
-		<div class="rounded-full bg-amber-300 h-4 w-4" />
-		<h1 class="font-display uppercase font-semibold tracking-wider text-xl">Reiverr</h1>
+		<img src="/ratflix.png" alt="Ratflix" class="w-20 z-20 absolute" />
 	</a>
 	<div
 		class="flex items-center justify-center gap-4 md:gap-8 font-normal text-sm tracking-wider text-zinc-200"
@@ -79,7 +79,7 @@
 		<IconButton on:click={openSearchModal}>
 			<MagnifyingGlass size={20} />
 		</IconButton>
-		<IconButton>
+		<IconButton on:click={() => authStore.logout()}>
 			<Person size={20} />
 		</IconButton>
 	</div>
@@ -87,8 +87,7 @@
 
 <div class={classNames(baseStyle, ' grid sm:hidden')}>
 	<a href="/" class="flex gap-2 items-center hover:text-inherit selectable rounded-sm px-2 -mx-2">
-		<div class="rounded-full bg-amber-300 h-4 w-4" />
-		<h1 class="font-display uppercase font-semibold tracking-wider text-xl">Reiverr</h1>
+		<img src="/ratflix.png" alt="Ratflix" class="w-20 z-20 absolute" />
 	</a>
 	<div />
 	<div class="flex items-center gap-2">

@@ -98,5 +98,10 @@
       "resetToDefaults": "Auf Standard zurücksetzen ",
       "changelog": "Änderungen"
     }
+  },
+  "auth": {
+    "username": "Benutzername",
+    "password": "Passwort",
+    "login": "Anmelden"
   }
 }

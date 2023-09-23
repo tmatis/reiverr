@@ -98,5 +98,10 @@
 			"resetToDefaults": "Réinitialiser les paramètres par défaut ",
 			"changelog": "Journal des modifications"
 		}
+	},
+	"auth": {
+		"username": "Nom d'utilisateur",
+		"password": "Mot de passe",
+		"login": "S'identifier"
 	}
 }

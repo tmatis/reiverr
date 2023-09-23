@@ -1,5 +1,5 @@
 {
-	"appName": "Reiverr",
+	"appName": "Ratflix",
 	"setupRequiredTitle": "Welcome to",
 	"setupRequiredDescription": "It seems like the application is missing some environment variables that are necessary for the application to function. Please provide the following environment variables:",
 	"navbar": {
@@ -98,5 +98,10 @@
 			"resetToDefaults": "Reset to Defaults ",
 			"changelog": "Changelog"
 		}
+	},
+	"auth": {
+		"username": "Username",
+		"password": "Password",
+		"login": "Login"
 	}
 }

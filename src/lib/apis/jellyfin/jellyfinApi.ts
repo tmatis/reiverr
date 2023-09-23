@@ -1,5 +1,6 @@
 import type { components, paths } from '$lib/apis/jellyfin/jellyfin.generated';
 import type { DeviceProfile } from '$lib/apis/jellyfin/playback-profiles';
+import { authStore } from '$lib/stores/auth.store';
 import { settings } from '$lib/stores/settings.store';
 import axios from 'axios';
 import createClient from 'openapi-fetch';
@@ -9,10 +10,13 @@ export type JellyfinItem = components['schemas']['BaseItemDto'];
 
 export const JELLYFIN_DEVICE_ID = 'Reiverr Client';
 
-function getJellyfinApi() {
+export function getJellyfinApi() {
 	const baseUrl = get(settings)?.jellyfin.baseUrl;
 	const apiKey = get(settings)?.jellyfin.apiKey;
-	const userId = get(settings)?.jellyfin.userId;
+	const authStoreValue = authStore.getStore();
+	console.log(authStoreValue);
+	const userId = authStoreValue?.jellyfinId;
+	console.log(userId);
 
 	if (!baseUrl || !apiKey || !userId) return undefined;
 
@@ -29,7 +33,7 @@ export const getJellyfinContinueWatching = async (): Promise<JellyfinItem[] | un
 		?.get('/Users/{userId}/Items/Resume', {
 			params: {
 				path: {
-					userId: get(settings)?.jellyfin.userId || ''
+					userId: authStore?.getStore().jellyfinId || ''
 				},
 				query: {
 					mediaTypes: ['Video'],
@@ -44,7 +48,7 @@ export const getJellyfinNextUp = async () =>
 		?.get('/Shows/NextUp', {
 			params: {
 				query: {
-					userId: get(settings)?.jellyfin.userId || '',
+					userId: authStore?.getStore().jellyfinId || '',
 					fields: ['ProviderIds', 'Genres']
 				}
 			}
@@ -56,7 +60,7 @@ export const getJellyfinItems = async () =>
 		?.get('/Users/{userId}/Items', {
 			params: {
 				path: {
-					userId: get(settings)?.jellyfin.userId || ''
+					userId: authStore?.getStore().jellyfinId || ''
 				},
 				query: {
 					hasTmdbId: true,
@@ -87,7 +91,7 @@ export const getJellyfinEpisodes = async (parentId = '') =>
 		?.get('/Users/{userId}/Items', {
 			params: {
 				path: {
-					userId: get(settings)?.jellyfin.userId || ''
+					userId: authStore?.getStore().jellyfinId || ''
 				},
 				query: {
 					recursive: true,
@@ -130,7 +134,7 @@ export const getJellyfinItem = async (itemId: string) =>
 			params: {
 				path: {
 					itemId,
-					userId: get(settings)?.jellyfin.userId || ''
+					userId: authStore?.getStore().jellyfinId || ''
 				}
 			}
 		})
@@ -152,7 +156,7 @@ export const getJellyfinPlaybackInfo = async (
 					itemId: itemId
 				},
 				query: {
-					userId: get(settings)?.jellyfin.userId || '',
+					userId: authStore?.getStore().jellyfinId || '',
 					startTimeTicks,
 					autoOpenLiveStream: true,
 					maxStreamingBitrate
@@ -240,7 +244,7 @@ export const setJellyfinItemWatched = async (jellyfinId: string) =>
 	getJellyfinApi()?.post('/Users/{userId}/PlayedItems/{itemId}', {
 		params: {
 			path: {
-				userId: get(settings)?.jellyfin.userId || '',
+				userId: authStore?.getStore().jellyfinId || '',
 				itemId: jellyfinId
 			},
 			query: {
@@ -253,7 +257,7 @@ export const setJellyfinItemUnwatched = async (jellyfinId: string) =>
 	getJellyfinApi()?.del('/Users/{userId}/PlayedItems/{itemId}', {
 		params: {
 			path: {
-				userId: get(settings)?.jellyfin.userId || '',
+				userId: authStore?.getStore().jellyfinId || '',
 				itemId: jellyfinId
 			}
 		}
