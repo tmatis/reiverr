@@ -112,7 +112,8 @@ export function createRadarrMovieStore(tmdbId: number) {
 
 export function createSonarrSeriesStore(name: Promise<string> | string) {
 	function shorten(str: string) {
-		return str.toLowerCase().replace(/[^a-zA-Z0-9]/g, '');
+		// replace accents and other special characters by their ascii equivalent
+		return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 	}
 
 	const store = writable<{ loading: boolean; item?: SonarrSeries }>({
