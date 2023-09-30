@@ -23,6 +23,9 @@ export interface RadarrMovieOptions {
 	tmdbId: number;
 	monitored?: boolean;
 	searchNow?: boolean;
+	addOptions?: {
+		searchForMovie?: boolean;
+	};
 }
 
 function getRadarrApi() {
@@ -75,9 +78,11 @@ export const addMovieToRadarr = async (tmdbId: number) => {
 		title: tmdbMovie.title || tmdbMovie.original_title || '',
 		tmdbId: tmdbMovie.id || 0,
 		year: Number(tmdbMovie.release_date?.slice(0, 4)),
-		monitored: false,
+		monitored: true,
 		tags: [],
-		searchNow: false
+		addOptions: {
+			searchForMovie: true
+		}
 	};
 
 	return (

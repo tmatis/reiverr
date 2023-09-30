@@ -151,11 +151,11 @@
 						</Button>
 					{:else if !radarrMovie && $settings.radarr.baseUrl && $settings.radarr.apiKey}
 						<Button type="primary" disabled={addToRadarrLoading} on:click={addToRadarr}>
-							<span>Add to Radarr</span><Plus size={20} />
+							<span>Add</span><Plus size={20} />
 						</Button>
 					{:else if radarrMovie}
-						<Button type="primary" on:click={openRequestModal}>
-							<span class="mr-2">Request Movie</span><Plus size={20} />
+						<Button type="primary" disabled >
+							<span class="mr-2">Searching..</span>
 						</Button>
 					{/if}
 				{/if}
