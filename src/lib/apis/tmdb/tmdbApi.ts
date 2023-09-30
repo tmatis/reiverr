@@ -78,6 +78,7 @@ export const getTmdbMovie = async (tmdbId: number) =>
 				movie_id: tmdbId
 			},
 			query: {
+				language: get(settings)?.language,
 				append_to_response: 'videos,credits,external_ids,images',
 				...({ include_image_language: get(settings)?.language + ',en,null' } as any)
 			}
@@ -91,6 +92,7 @@ export const getTmdbSeriesFromTvdbId = async (tvdbId: string) =>
 				external_id: tvdbId
 			},
 			query: {
+				language: get(settings)?.language,
 				external_source: 'tvdb_id'
 			}
 		},
@@ -113,6 +115,7 @@ export const getTmdbSeries = async (tmdbId: number): Promise<TmdbSeriesFull2 | u
 				series_id: tmdbId
 			},
 			query: {
+				language: get(settings)?.language,
 				append_to_response: 'videos,aggregate_credits,external_ids,images',
 				...({ include_image_language: get(settings)?.language + ',en,null' } as any)
 			}
@@ -131,6 +134,9 @@ export const getTmdbSeriesSeason = async (
 			path: {
 				series_id: tmdbId,
 				season_number: season
+			},
+			query: {
+				language: get(settings)?.language,
 			}
 		}
 	}).then((res) => res.data);
@@ -225,7 +231,8 @@ export const getTmdbNetworkSeries = (networkId: number) =>
 	TmdbApiOpen.get('/3/discover/tv', {
 		params: {
 			query: {
-				with_networks: networkId
+				with_networks: networkId,
+				language: get(settings)?.language
 			}
 		}
 	}).then((res) => res.data?.results || []);
@@ -234,7 +241,8 @@ export const getTmdbGenreMovies = (genreId: number) =>
 	TmdbApiOpen.get('/3/discover/movie', {
 		params: {
 			query: {
-				with_genres: String(genreId)
+				with_genres: String(genreId),
+				language: get(settings)?.language,
 			}
 		}
 	}).then((res) => res.data?.results || []);
@@ -243,7 +251,10 @@ export const getTmdbSeriesRecommendations = (tmdbId: number) =>
 	TmdbApiOpen.get('/3/tv/{series_id}/recommendations', {
 		params: {
 			path: {
-				series_id: tmdbId
+				series_id: tmdbId,
+			},
+			query: {
+				language: get(settings)?.language,
 			}
 		}
 	}).then((res) => res.data?.results || []);
@@ -253,6 +264,9 @@ export const getTmdbSeriesSimilar = (tmdbId: number) =>
 		params: {
 			path: {
 				series_id: String(tmdbId)
+			},
+			query: {
+				language: get(settings)?.language,
 			}
 		}
 	}).then((res) => res.data?.results || []);
@@ -262,6 +276,9 @@ export const getTmdbSeriesCredits = (tmdbId: number) =>
 		params: {
 			path: {
 				series_id: tmdbId
+			},
+			query: {
+				language: get(settings)?.language,
 			}
 		}
 	}).then((res) => res.data?.cast || []);
@@ -271,6 +288,9 @@ export const getTmdbMovieRecommendations = (tmdbId: number) =>
 		params: {
 			path: {
 				movie_id: tmdbId
+			},
+			query: {
+				language: get(settings)?.language,
 			}
 		}
 	}).then((res) => res.data?.results || []);
@@ -280,6 +300,9 @@ export const getTmdbMovieSimilar = (tmdbId: number) =>
 		params: {
 			path: {
 				movie_id: tmdbId
+			},
+			query: {
+				language: get(settings)?.language,
 			}
 		}
 	}).then((res) => res.data?.results || []);
@@ -288,7 +311,8 @@ export const searchTmdbTitles = (query: string) =>
 	TmdbApiOpen.get('/3/search/multi', {
 		params: {
 			query: {
-				query
+				query,
+				language: get(settings)?.language,
 			}
 		}
 	}).then((res) => res.data?.results || []);
@@ -340,7 +364,8 @@ export const getTmdbPerson = async (person_id: number) =>
 				person_id: person_id
 			},
 			query: {
-				append_to_response: 'images,movie_credits,tv_credits,external_ids'
+				append_to_response: 'images,movie_credits,tv_credits,external_ids',
+				language: get(settings)?.language,
 			}
 		}
 	}).then((res) => res.data as TmdbPersonFull);
