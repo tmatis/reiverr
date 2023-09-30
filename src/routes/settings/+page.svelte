@@ -15,6 +15,7 @@
 	import { fade } from 'svelte/transition';
 	import { _ } from 'svelte-i18n';
 	import { createErrorNotification } from '$lib/stores/notification.store';
+	import { authStore } from '$lib/stores/auth.store';
 
 	type Section = 'general' | 'integrations';
 
@@ -89,7 +90,13 @@
 		updateRadarrHealth();
 		updateJellyfinHealth();
 
-		axios.post('/api/settings', values).then(() => {
+		const authValues = authStore.getStore(); 
+
+		axios.post('/api/settings', values, {
+			headers: {
+				'Authorization': `Bearer ${authValues?.token}`
+			}}
+		).then(() => {
 			settings.set(values);
 		});
 	}
