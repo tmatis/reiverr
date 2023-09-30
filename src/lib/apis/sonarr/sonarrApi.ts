@@ -21,7 +21,7 @@ export interface SonarrSeriesOptions {
 	tvdbId: number;
 	rootFolderPath: string;
 	addOptions: {
-		monitor:
+		monitor?:
 			| 'unknown'
 			| 'all'
 			| 'future'
@@ -89,11 +89,10 @@ export const addSeriesToSonarr = async (tmdbId: number) => {
 		title: tmdbSeries.name,
 		tvdbId: tmdbSeries.external_ids.tvdb_id,
 		qualityProfileId: get(settings)?.sonarr.qualityProfileId || 0,
-		monitored: false,
+		monitored: true,
 		addOptions: {
-			monitor: 'none',
 			searchForMissingEpisodes: false,
-			searchForCutoffUnmetEpisodes: false
+			searchForCutoffUnmetEpisodes: false,
 		},
 		rootFolderPath: get(settings)?.sonarr.rootFolderPath || '',
 		languageProfileId: get(settings)?.sonarr.languageProfileId || 0,
