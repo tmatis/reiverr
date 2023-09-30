@@ -213,7 +213,6 @@ export const getTmdbPopularMovies = () =>
 		params: {
 			query: {
 				language: get(settings)?.language,
-				region: get(settings)?.discover.region
 			}
 		}
 	}).then((res) => res.data?.results || []);
