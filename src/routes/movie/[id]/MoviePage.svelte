@@ -155,7 +155,7 @@
 						</Button>
 					{:else if radarrMovie}
 						<Button type="primary" disabled >
-							<span class="mr-2">Searching..</span>
+							<span class="mr-2">Added..</span>
 						</Button>
 					{/if}
 				{/if}
