@@ -113,7 +113,10 @@ export function createRadarrMovieStore(tmdbId: number) {
 export function createSonarrSeriesStore(name: Promise<string> | string) {
 	function shorten(str: string) {
 		// replace accents and other special characters by their ascii equivalent
-		return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+		return str.toLowerCase()
+			.normalize('NFD')
+			.replace(/[\u0300-\u036f]/g, '')
+			.replace(/-/g, ' ')
 	}
 
 	const store = writable<{ loading: boolean; item?: SonarrSeries }>({
@@ -124,12 +127,14 @@ export function createSonarrSeriesStore(name: Promise<string> | string) {
 	sonarrSeriesStore.subscribe(async (s) => {
 		const awaited = await name;
 
+		const shortened = shorten(awaited);
+
 		store.set({
 			loading: s.loading,
 			item: s.data?.find(
 				(i) =>
-					shorten(i.titleSlug || '') === shorten(awaited) ||
-					i.alternateTitles?.find((t) => shorten(t.title || '') === shorten(awaited))
+					shorten(i.titleSlug || '') === shortened||
+					i.alternateTitles?.find((t) => shorten(t.title || '') === shortened)
 			)
 		});
 	});
