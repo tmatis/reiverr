@@ -89,10 +89,10 @@ export const addSeriesToSonarr = async (tmdbId: number) => {
 		title: tmdbSeries.name,
 		tvdbId: tmdbSeries.external_ids.tvdb_id,
 		qualityProfileId: get(settings)?.sonarr.qualityProfileId || 0,
-		monitored: true,
+		monitored: false,
 		addOptions: {
 			searchForMissingEpisodes: false,
-			searchForCutoffUnmetEpisodes: false,
+			searchForCutoffUnmetEpisodes: false
 		},
 		rootFolderPath: get(settings)?.sonarr.rootFolderPath || '',
 		languageProfileId: get(settings)?.sonarr.languageProfileId || 0,
@@ -313,4 +313,69 @@ export function getSonarrPosterUrl(item: SonarrSeries, original = false) {
 	if (!original) return url.replace('poster.jpg', `poster-${500}.jpg`);
 
 	return url;
+}
+
+export async function putSeries(
+	series: SonarrSeries
+) {
+	if (!series.id) return false;
+	const res = await getSonarrApi()?.put('/api/v3/series/{id}', {
+		params: {
+			path: {
+				id: series.id.toString()
+			}
+		},
+		body: series
+	});
+	return res?.response.ok || false;
+}
+
+export async function searchAllMissingEpisodes() {
+	const commandResponse = await getSonarrApi()?.post('/api/v3/command', {
+		params: {},
+		body: {
+			name: 'missingEpisodeSearch',
+		}
+	});
+	if (!commandResponse?.data?.id) return false;
+	const run = true;
+	while (run) {
+		const queueResponse = await getSonarrApi()?.get('/api/v3/command/{id}', {
+			params: {
+				path: {
+					id: commandResponse.data.id
+				}
+			}
+		});
+		if (!queueResponse?.data?.status) return false;
+		if (queueResponse?.data.status === 'completed') return true;
+		if (queueResponse?.data.status === 'failed') return false;
+		await new Promise((resolve) => setTimeout(resolve, 1000));
+	}
+	return false; // Should never happen
+}
+
+export async function getMissingEpisodes() {
+	const missingEpisodes = await getSonarrApi()?.get('/api/v3/wanted/missing', {
+		params: {
+			query: {
+				monitored: true,
+				sortDirection: 'ascending',
+				sortKey: 'airDateUtc'
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			} as any
+		}
+	});
+	return missingEpisodes?.data?.records || [];
+}
+
+export async function searchSelectedEpisodes(episodeIds: number[]) {
+	return getSonarrApi()?.post('/api/v3/command', {
+		params: {},
+		body: {
+			name: 'EpisodeSearch',
+			commandName: 'EpisodeSearch',
+			episodeIds
+		} as components['schemas']['Command']
+	});
 }

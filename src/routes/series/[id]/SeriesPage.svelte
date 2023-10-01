@@ -16,6 +16,7 @@
 	import UiCarousel from '$lib/components/Carousel/UICarousel.svelte';
 	import EpisodeCard from '$lib/components/EpisodeCard/EpisodeCard.svelte';
 	import PersonCard from '$lib/components/PersonCard/PersonCard.svelte';
+	import SeasonDownloadModal from '$lib/components/RequestModal/SeasonDownloadModal.svelte';
 	import SeriesRequestModal from '$lib/components/RequestModal/SeriesRequestModal.svelte';
 	import OpenInButton from '$lib/components/TitlePageLayout/OpenInButton.svelte';
 	import TitlePageLayout from '$lib/components/TitlePageLayout/TitlePageLayout.svelte';
@@ -26,6 +27,7 @@
 		createSonarrDownloadStore,
 		createSonarrSeriesStore
 	} from '$lib/stores/data.store';
+
 	import { modalStack } from '$lib/stores/modal.store';
 	import { settings } from '$lib/stores/settings.store';
 	import type { TitleId } from '$lib/types';
@@ -38,6 +40,7 @@
 	export let titleId: TitleId;
 	export let isModal = false;
 	export let handleCloseModal: () => void = () => {};
+
 
 	let data = loadInitialPageData();
 
@@ -170,6 +173,15 @@
 		});
 	}
 
+	async function openSeasonSelectModal() {
+		const sonarrSeries = get(sonarrSeriesStore).item;
+		if (!sonarrSeries?.id || !sonarrSeries?.statistics?.seasonCount) return;
+
+		modalStack.create(SeasonDownloadModal, {
+			sonarrSeriesStore,
+		});
+	}
+
 	// Focus next episode on load
 	let didFocusNextEpisode = false;
 	$: {
@@ -256,11 +268,11 @@
 						</Button>
 					{:else if !$sonarrSeriesStore.item && $settings.sonarr.apiKey && $settings.sonarr.baseUrl}
 						<Button type="primary" disabled={addToSonarrLoading} on:click={addToSonarr}>
-							<span>Add to Sonarr</span><Plus size={20} />
+							<span>Add</span><Plus size={20} />
 						</Button>
 					{:else if $sonarrSeriesStore.item}
-						<Button type="primary" on:click={openRequestModal}>
-							<span class="mr-2">Request Series</span><Plus size={20} />
+						<Button type="primary" on:click={openSeasonSelectModal}>
+							<span class="mr-2">Add a season</span><Plus size={20} />
 						</Button>
 					{/if}
 				{/if}
