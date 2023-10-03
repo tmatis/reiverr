@@ -31,7 +31,7 @@
 					(b.DateCreated || b.DateLastMediaAdded || '')
 						? 1
 						: -1
-				)?.[3]
+				)?.[0]
 	);
 
 	let downloadProps: ComponentProps<Poster>[] = [];
