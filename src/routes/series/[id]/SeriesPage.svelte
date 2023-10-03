@@ -435,6 +435,9 @@
 				{/if}
 
 				<div class="flex gap-4 flex-wrap col-span-4 sm:col-span-6 mt-4">
+					<Button on:click={openSeasonSelectModal}>
+						<span class="mr-2">Add season</span><Plus size={20} />
+					</Button>
 					<Button on:click={openRequestModal}>
 						<span class="mr-2">Request Series</span><Plus size={20} />
 					</Button>
