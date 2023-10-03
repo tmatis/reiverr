@@ -116,7 +116,10 @@ export function createSonarrSeriesStore(name: Promise<string> | string) {
 		return str.toLowerCase()
 			.normalize('NFD')
 			.replace(/[\u0300-\u036f]/g, '')
-			.replace(/-/g, ' ')
+			// remove all characters that are not letters, numbers, dash, or space
+			.replace(/[^a-z0-9\s-]/g, '')
+			.trim()
+			.replace(/ /g, '-')
 	}
 
 	const store = writable<{ loading: boolean; item?: SonarrSeries }>({
