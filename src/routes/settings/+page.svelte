@@ -277,13 +277,6 @@
 				{/if}
 			</div>
 		</div>
-		<div class="flex items-center p-4 gap-8 justify-center text-zinc-500 bg-stone-950">
-			<div>v{version}</div>
-			<a target="_blank" href="https://github.com/aleksilassila/reiverr/releases">
-				{$_('settings.misc.changelog')}
-			</a>
-			<a target="_blank" href="https://github.com/aleksilassila/reiverr">GitHub</a>
-		</div>
 	</div>
 </div>
 

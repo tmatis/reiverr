@@ -1,4 +1,3 @@
-// https://github.com/meikidd/iso-639-1/blob/master/src/data.js
 export const ISO_LANGUAGES = {
 	en: {
 		name: 'English',
